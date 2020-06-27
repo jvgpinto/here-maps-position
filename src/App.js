@@ -1,8 +1,7 @@
 import React from "react";
-
 import Global from "./styles/global";
-
 import Home from "./pages/Home/Home";
+import {DisplayMapClass} from './DisplayMapClass';
 
 const lorem =
   "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, sed iure blanditiis voluptatum nulla quidem minus quam tempora obcaecati necessitatibus inventore! Vitae totam quam pariatur facilis fugit maxime adipisci eaque.";
@@ -38,6 +37,7 @@ function App() {
   return (
     <>
       <Global />
+      <DisplayMapClass />
       <Home boxData={data} />
     </>
   );
