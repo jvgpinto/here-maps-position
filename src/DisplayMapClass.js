@@ -10,6 +10,8 @@ export class DisplayMapClass extends React.Component {
 
   componentDidMount() {
 
+    let locationNow;
+    
     const H = window.H;
     const platform = new H.service.Platform({
         apikey: "-5_JlpUxRxxJW-pE4YPyEmehgzTyN4hUdsXUfhp3QJU"
@@ -22,21 +24,41 @@ export class DisplayMapClass extends React.Component {
       this.mapRef.current,
       defaultLayers.vector.normal.map,
       {
-        // This map is centered over Europe
-        center: { lat: 46, lng: -70 },
-        zoom: 8,
+        center: locationNow ? {lat:locationNow.latitude,lng:locationNow.longitude}:{ lat: 45.4970741, lng: -73.4703679 },
+        zoom: 10,
         pixelRatio: window.devicePixelRatio || 1
       }
     );
-    // MapEvents enables the event system
-    // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
-    // This variable is unused and is present for explanatory purposes
     const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-
-    // Create the default UI components to allow the user to interact with them
-    // This variable is unused
+    console.log(behavior);
     const ui = H.ui.UI.createDefault(map, defaultLayers);
+    console.log(ui);
+
+    if("geolocation" in navigator)
+    {
+        //console.log("Geolocation avaible");
+        navigator.geolocation.getCurrentPosition(function(position) {
+            //console.log("Latitude is :", position.coords.latitude);
+            //console.log("Longitude is :", position.coords.longitude);
+            locationNow = position;
+            var currentPositionPngIcon = new H.map.Icon(require("./images/icon_gps_position.png"), {size: {w: 56, h: 56}});
+            var currentPositionMarker = new H.map.Marker({lat:locationNow.coords.latitude,lng:locationNow.coords.longitude},{icon: currentPositionPngIcon});
+            map.addObject(currentPositionMarker);
+            map.setCenter({lat:locationNow.coords.latitude,lng:locationNow.coords.longitude});
+            map.setZoom(14);
+        });
+    }else{
+        console.log("Geolocation not avaible");
+        alert("Your browser do not support geolocation, the application will not work.");
+    }
+    
     this.setState({ map });
+
+    window.addEventListener('resize', function(e){
+        map.getViewPort().resize();
+        map.setCenter({lat:locationNow.coords.latitude,lng:locationNow.coords.longitude});
+        map.setZoom(15);
+    });
   }
 
   componentWillUnmount() {
