@@ -1,3 +1,12 @@
+Packages dependencies:
+- create-react-app
+- react-scripts
+
+How to lunch the app?
+ - Install npm
+ - run the command npm install create-react-app
+ - Clone the git project 
+ - rum npm start
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
